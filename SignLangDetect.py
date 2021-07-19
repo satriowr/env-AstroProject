@@ -17,13 +17,13 @@ config = {
     "databaseURL" : "https://astroapp-cbf26-default-rtdb.firebaseio.com",
     "projectId" : "astroapp-cbf26",
     "storageBucket" : "astroapp-cbf26.appspot.com",
-    "serviceAccount" : r"C:\Users\user\python-astroProject\env\serviceAccAstro.json"
+    "serviceAccount" : r"serviceAccAstro.json"
 }
 
 firebaseConnect = pyrebase.initialize_app(config)
 # storage = firebase_strorage.storage()
 db = firebaseConnect.database()
-cred = credentials.Certificate("D:\satrio\Python-SignLangDetection\serviceAccAstro.json")
+cred = credentials.Certificate("serviceAccAstro.json")
 firebase_admin.initialize_app(cred)
 
 #declare
