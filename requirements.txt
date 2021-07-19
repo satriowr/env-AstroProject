@@ -1,0 +1,6 @@
+opencv-python
+mediapipe
+pyrebase
+pyrebase4
+asyncio
+crypto
