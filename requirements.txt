@@ -4,3 +4,4 @@ pyrebase
 pyrebase4
 asyncio
 crypto
+firebase-admin
