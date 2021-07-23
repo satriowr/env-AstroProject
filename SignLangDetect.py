@@ -89,6 +89,24 @@ while True :
                         await asyncio.sleep(2)
                         db.push(dataset)
                     asyncio.run(minum())
+                    
+                    registration_token = 'cRfpYMsMSGSTB5bHpIF2C2:APA91bE6GipnV7bf_EQFTlE6iPl1LoqFucA_a29iUCbSvVZdjFz5RiqzEYHhdiK_PRaL2kIkdm8yhRtVZNRy1qiUk76nujvPUsPHoJfTiNeSMhhSHHtlZiM-T4xZHMMOhArhh9wgi7OB'
+
+                    # See documentation on defining a message payload.
+                    message = messaging.Message(
+                        data={
+                            'title': 'Astro',
+                            'body': 'Pasien Membutuhkan Minum',
+                        },
+                        token=registration_token,
+                    )
+
+                    # Send a message to the device corresponding to the provided
+                    # registration token.
+                    response = messaging.send(message)
+                    # Response is a message ID string.
+                    print('Successfully sent message:', response)
+                    print(message)
 
             elif sign_status == [True, True, True, False]:
                 if lm_list[jempol_sign].y < lm_list[jempol_sign - 1].y < lm_list[jempol_sign - 2].y :
