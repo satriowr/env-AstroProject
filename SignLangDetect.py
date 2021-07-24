@@ -2,29 +2,35 @@ from typing import ItemsView
 from asyncio.tasks import sleep
 import cv2
 import mediapipe as mp
-import os
-import time
+# import os
+# import time
 import asyncio
 import pyrebase
-import firebase_admin
-from firebase_admin import credentials
+# import firebase_admin
+# from firebase_admin import credentials, messaging
 from datetime import datetime
+from pusher_push_notifications import PushNotifications
 
-#config Firebase
+# config Firebase
 config = {
     "apiKey" : "AIzaSyDkFn3LdpjPly4w31eL6CAQIktzSclaMg0",
     "authDomain" : "astroapp-cbf26.firebaseapp.com",
     "databaseURL" : "https://astroapp-cbf26-default-rtdb.firebaseio.com",
     "projectId" : "astroapp-cbf26",
     "storageBucket" : "astroapp-cbf26.appspot.com",
-    "serviceAccount" : r"serviceAccAstro.json"
+    "serviceAccount" : r"C:\Users\user\env-AstroProject\serviceAccAstro.json"
 }
 
 firebaseConnect = pyrebase.initialize_app(config)
 # storage = firebase_strorage.storage()
 db = firebaseConnect.database()
-cred = credentials.Certificate("serviceAccAstro.json")
-firebase_admin.initialize_app(cred)
+# cred = credentials.Certificate("serviceAccAstro.json")
+# firebase_admin.initialize_app(cred)
+
+pn_client = PushNotifications(
+    instance_id='664b9c5f-0e58-442f-a7e4-4f7c7e0c2b87',
+    secret_key='A975DDC2A5253248B6DEA2167B6ADBFC20BE8473F27B671D0D50FF1103EA3F7A',
+)
 
 #declare
 mp_hands = mp.solutions.hands
@@ -89,24 +95,17 @@ while True :
                         await asyncio.sleep(2)
                         db.push(dataset)
                     asyncio.run(minum())
-                    
-                    registration_token = 'cRfpYMsMSGSTB5bHpIF2C2:APA91bE6GipnV7bf_EQFTlE6iPl1LoqFucA_a29iUCbSvVZdjFz5RiqzEYHhdiK_PRaL2kIkdm8yhRtVZNRy1qiUk76nujvPUsPHoJfTiNeSMhhSHHtlZiM-T4xZHMMOhArhh9wgi7OB'
 
-                    # See documentation on defining a message payload.
-                    message = messaging.Message(
-                        data={
-                            'title': 'Astro',
-                            'body': 'Pasien Membutuhkan Minum',
-                        },
-                        token=registration_token,
+                    #cons variable
+                    TOPIC = "aktivitas"
+                    ALERT_NOTIF = "Report Created"
+                    TITLE_NOTIF = "Aktivitas Pasien"
+                    BODY_NOTIF = "Pasien membutuhkan minum"
+                    response = pn_client.publish(
+                        interests=[TOPIC],
+                        publish_body={'apns': {'aps': {'alert': ALERT_NOTIF}},
+                                        'fcm': {'notification': {'title': TITLE_NOTIF, 'body': BODY_NOTIF}}}
                     )
-
-                    # Send a message to the device corresponding to the provided
-                    # registration token.
-                    response = messaging.send(message)
-                    # Response is a message ID string.
-                    print('Successfully sent message:', response)
-                    print(message)
 
             elif sign_status == [True, True, True, False]:
                 if lm_list[jempol_sign].y < lm_list[jempol_sign - 1].y < lm_list[jempol_sign - 2].y :
@@ -127,6 +126,17 @@ while True :
                         db.push(dataset)
                     asyncio.run(makan())
                     
+                    #cons variable
+                    TOPIC = "aktivitas"
+                    ALERT_NOTIF = "Report Created"
+                    TITLE_NOTIF = "Aktivitas Pasien"
+                    BODY_NOTIF = "Pasien membutuhkan makan"
+                    response = pn_client.publish(
+                        interests=[TOPIC],
+                        publish_body={'apns': {'aps': {'alert': ALERT_NOTIF}},
+                                        'fcm': {'notification': {'title': TITLE_NOTIF, 'body': BODY_NOTIF}}}
+                    )
+
             elif sign_status == [False, True, True, True]:
                 if lm_list[jempol_sign].y < lm_list[jempol_sign - 1].y < lm_list[jempol_sign - 2].y :
                     cv2.putText(img, "PIPIS", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1,(0, 0, 255), 3)
@@ -146,6 +156,17 @@ while True :
                         db.push(dataset)
                     asyncio.run(pipis())
             
+                    #cons variable
+                    TOPIC = "aktivitas"
+                    ALERT_NOTIF = "Report Created"
+                    TITLE_NOTIF = "Aktivitas Pasien"
+                    BODY_NOTIF = "Pasien membutuhkan pergi ke kamar mandi"
+                    response = pn_client.publish(
+                        interests=[TOPIC],
+                        publish_body={'apns': {'aps': {'alert': ALERT_NOTIF}},
+                                        'fcm': {'notification': {'title': TITLE_NOTIF, 'body': BODY_NOTIF}}}
+                    )
+
             elif sign_status == [False, False, True, True]: 
                 if lm_list[jempol_sign].y < lm_list[jempol_sign - 1].y < lm_list[jempol_sign - 2].y :
                     cv2.putText(img, "PUP", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1,(0, 0, 255), 3)
@@ -164,6 +185,17 @@ while True :
                         await asyncio.sleep(2)
                         db.push(dataset)
                     asyncio.run(pup())
+
+                    #cons variable
+                    TOPIC = "aktivitas"
+                    ALERT_NOTIF = "Report Created"
+                    TITLE_NOTIF = "Aktivitas Pasien"
+                    BODY_NOTIF = "Pasien membutuhkan pergi ke kamar mandi"
+                    response = pn_client.publish(
+                        interests=[TOPIC],
+                        publish_body={'apns': {'aps': {'alert': ALERT_NOTIF}},
+                                        'fcm': {'notification': {'title': TITLE_NOTIF, 'body': BODY_NOTIF}}}
+                    )
             
             mp_draw.draw_landmarks(img, hand_landmark,
                                    mp_hands.HAND_CONNECTIONS,
