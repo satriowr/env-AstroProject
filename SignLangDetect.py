@@ -66,11 +66,7 @@ while True :
                 x, y = int(lm_list[sign].x * w), int(lm_list[sign].y * h)
                 cv2.circle(img, (x, y), 15, (255, 0, 0), cv2.FILLED)
 
-                if lm_list[sign].x < lm_list[sign - 3].x :
-                     cv2.circle(img, (x, y), 15, (0, 255, 0), cv2.FILLED)
-                     sign_status.append(True)
-                
-                elif lm_list[sign].x < lm_list[sign - 2].x :
+                if lm_list[sign].x < lm_list[sign - 2].x :
                      cv2.circle(img, (x, y), 15, (0, 255, 0), cv2.FILLED)
                      sign_status.append(True)
                 
